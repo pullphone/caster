@@ -8,7 +8,7 @@ class SampleTest extends \PHPUnit_Framework_TestCase
 {
     public function test001()
     {
-        $class = new Caster();
+        $class = Caster::getAccessor('sample');
         $this->assertNotEmpty($class);
     }
 }

@@ -1,6 +1,6 @@
 <phpunit backupGlobals="false"
          backupStaticAttributes="false"
-         bootstrap="../vendor/autoload.php"
+         bootstrap="bootstrap.php"
          cacheTokens="true"
          colors="true"
          convertErrorsToExceptions="true"
@@ -13,9 +13,10 @@
     <filter>
         <whitelist addUncoveredFilesFromWhitelist="false">
             <directory>../src/</directory>
+            <directory>./Test/</directory>
         </whitelist>
     </filter>
     <testsuite name="Caster Test Suite">
-        <directory>.</directory>
+        <directory>./UnitTest</directory>
     </testsuite>
 </phpunit>
