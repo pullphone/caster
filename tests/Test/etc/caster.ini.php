@@ -16,7 +16,7 @@ return [
             'password' => 'root',
         ],
     ],
-    'test_1' => [
+    'test_0' => [
         'master' => [
             'host' => '127.0.0.1:3306',
             'database' => 'caster_test_1',
@@ -30,7 +30,7 @@ return [
             'password' => 'root',
         ],
     ],
-    'test_2' => [
+    'test_1' => [
         'master' => [
             'host' => '127.0.0.1:3306',
             'database' => 'caster_test_2',

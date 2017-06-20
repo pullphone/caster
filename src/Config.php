@@ -7,20 +7,12 @@ use Caster\Exception\ExceptionInterface;
 
 class Config
 {
-    private static $configDir = __DIR__;
+    const CONFIG_FILE_NAME = 'caster.ini.php';
     private static $data = [];
 
-    const CONFIG_FILE_NAME = 'caster.ini.php';
-
-    public static function setConfigDir($dirName)
+    public static function initialize($dir)
     {
-        self::$configDir = $dirName;
-        self::load();
-    }
-
-    private static function load()
-    {
-        $configFilePath = sprintf('%s/%s', self::$configDir, self::CONFIG_FILE_NAME);
+        $configFilePath = sprintf('%s/%s', $dir, self::CONFIG_FILE_NAME);
         if (!file_exists($configFilePath)) {
             throw new ConfigException(
                 sprintf('%s is not found', $configFilePath),

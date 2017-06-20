@@ -10,12 +10,17 @@ class Accessor
 {
     private static $instances = [];
 
+    /**
+     * @param $schema
+     * @return DataFormat
+     */
     public static function getInstance($schema)
     {
-        if (!isset(self::$instances[$schema])) {
-            self::$instances[$schema] = self::createInstance($schema);
+        $key = strtolower($schema);
+        if (!isset(self::$instances[$key])) {
+            self::$instances[$key] = self::createInstance($schema);
         }
-        return self::$instances[$schema];
+        return self::$instances[$key];
     }
 
     protected static function createInstance($schema)
@@ -29,12 +34,16 @@ class Accessor
             );
         }
 
+        $fullClassName = self::getFullClassName($dataFormatNamespace, $schema);
+        return new $fullClassName();
+    }
+
+    protected static function getFullClassName($dataFormatNamespace, $schema)
+    {
         $namespaces = explode("\\", $schema);
         $upperNamespaces = array_map(function ($namespace) {
             return ucfirst($namespace);
         }, $namespaces);
-        $fullClassName = sprintf("\\%s\\%s", $dataFormatNamespace, implode("\\", $upperNamespaces));
-
-        return new $fullClassName();
+        return sprintf("\\%s\\%s", $dataFormatNamespace, implode("\\", $upperNamespaces));
     }
 }
