@@ -15,9 +15,10 @@ class Config
     public static function setConfigDir($dirName)
     {
         self::$configDir = $dirName;
+        self::load();
     }
 
-    public static function initialize()
+    private static function load()
     {
         $configFilePath = sprintf('%s/%s', self::$configDir, self::CONFIG_FILE_NAME);
         if (!file_exists($configFilePath)) {
@@ -36,5 +37,53 @@ class Config
             return null;
         }
         return self::$data[$key];
+    }
+
+    public static function getConnectionConfig($database, $dbType)
+    {
+        $config = self::get($database);
+        if (empty($config)) {
+            throw new ConfigException(
+                sprintf('cannot find database configuration : %s', $database)
+            );
+        }
+
+        if (empty($config['master'])) {
+            throw new ConfigException(
+                sprintf('cannot find database typed configuration : %s[master]', $database)
+            );
+        }
+
+        if (empty($config[$dbType])) {
+            throw new ConfigException(
+                sprintf('cannot find database typed configuration : %s[%s]', $database, $dbType)
+            );
+        }
+
+        $masterConfig = $config['master'];
+        $typedConfig = $config[$dbType];
+        $pass = $masterConfig['password'] ?? null;
+        $charset = $masterConfig['charset'] ?? 'utf8';
+        $db = $typedConfig['database'] ?? $masterConfig['database'];
+        $host = $typedConfig['host'] ?? $masterConfig['host'];
+        $user = $typedConfig['user'] ?? $masterConfig['user'];
+        $pass = $typedConfig['password'] ?? $pass;
+        $charset = $typedConfig['charset'] ?? $charset;
+
+        if (is_array($host)) {
+            shuffle($host);
+            $host = array_shift($host);
+        }
+
+        list($host, $port) = explode(':', $host);
+
+        return [
+            'db' => $db,
+            'host' => $host,
+            'port' => $port,
+            'user' => $user,
+            'password' => $pass,
+            'charset' => $charset
+        ];
     }
 }

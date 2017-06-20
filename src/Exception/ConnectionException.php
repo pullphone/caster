@@ -4,7 +4,7 @@ namespace Caster\Exception;
 
 use Throwable;
 
-class HandlerException extends \RuntimeException implements ExceptionInterface
+class ConnectionException extends \RuntimeException implements ExceptionInterface
 {
     public function __construct($message = "", $code = 0, Throwable $previous = null)
     {
