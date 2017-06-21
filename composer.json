@@ -1,13 +1,16 @@
 {
     "name": "pullphone/caster",
-    "description": "Simple Database Binder",
+    "version": "0.1",
+    "keywords": ["database", "mysql"],
+    "description": "Simple Database Wrapper for Mysqli extension",
     "type": "library",
     "license": "MIT",
     "homepage": "https://github.com/pullphone/caster",
     "authors": [
         {
             "name": "pull",
-            "email": "mail@pull-phone.com"
+            "email": "mail@pull-phone.com",
+            "homepage": "https://twitter.com/pullphone"
         }
     ],
     "require": {

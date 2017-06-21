@@ -18,5 +18,6 @@
     </filter>
     <testsuite name="Caster Test Suite">
         <directory>./UnitTest</directory>
+        <directory>./FeatureTest</directory>
     </testsuite>
 </phpunit>
