@@ -3,6 +3,7 @@
 namespace Caster;
 
 use Caster\DataFormat\DataFormat;
+use Caster\Exception\ExecutorException;
 
 class Executor
 {
@@ -15,7 +16,7 @@ class Executor
 
     public function findEx(
         string $queryName,
-        array $params = null,
+        array $params = [],
         int $limit = null,
         int $offset = null,
         string $dbType = 'slave'
@@ -25,7 +26,7 @@ class Executor
         $query = new Query($baseQuery, $schema);
 
         $query->setTableName($this->dataFormat->getTableName($params));
-        if ($limit > 0) {
+        if (!is_null($limit) && $limit > 0) {
             $query->setLimit($limit);
         }
         if (!is_null($offset) && $offset >= 0) {
@@ -38,16 +39,24 @@ class Executor
         $queryStr = $query->getEmulateQuery($conn);
         $result = $conn->query($queryStr);
 
+        if ($result === false) {
+            $error = $conn->error;
+            $errorCode = $conn->errno;
+            throw new ExecutorException(
+                sprintf('cannot execution query : %s / %s / %s', $queryName, $errorCode, $error)
+            );
+        }
+
         if ($result instanceof \mysqli_result) {
             return $result->fetch_all(MYSQLI_ASSOC);
         }
 
-        return $result;
+        return (int)$result;
     }
 
     public function find(
         string $queryName,
-        array $params = null,
+        array $params = [],
         int $limit = null,
         int $offset = null,
         bool $useMaster = false
@@ -69,11 +78,9 @@ class Executor
         return [];
     }
 
-    public function exec(string $queryName, array $params = null, array $hint = null)
+    public function exec(string $queryName, array $params = [], array $hint = [])
     {
-        if (is_array($params) && is_array($hint)) {
-            $params += $hint;
-        }
+        $params += $hint;
 
         $baseQuery = $this->dataFormat->getBaseQuery($queryName);
         $schema = get_class($this->dataFormat);
@@ -88,7 +95,11 @@ class Executor
         $result = $conn->real_query($queryStr);
 
         if ($result === false) {
-            return false;
+            $error = $conn->error;
+            $errorCode = $conn->errno;
+            throw new ExecutorException(
+                sprintf('cannot execution query : %s / %s / %s', $queryName, $errorCode, $error)
+            );
         }
 
         return (int)$conn->affected_rows;

@@ -13,33 +13,42 @@ class Sample extends \Caster\DataFormat\DataFormat
           `key` VARCHAR(255) NOT NULL,
           `value` VARCHAR(255) NOT NULL,
           `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-          `created_at` TIMESTAMP DEFAULT '0000-00-00 00:00:00',
+          `created_at` TIMESTAMP DEFAULT '2000-01-01 00\\:00\\:00',
           PRIMARY KEY (id),
           UNIQUE KEY `key` (`key`)
         )",
         'drop_table' => "DROP TABLE IF EXISTS __TABLE_NAME__",
         'insert' => "INSERT INTO __TABLE_NAME__ (
-          `name`,
           `key`,
-          `value`
+          `value`,
+          created_at
         ) VALUES (
-          :name,
           :key,
-          :value
+          :value,
+          CURRENT_TIMESTAMP
         )",
         'insert_multi' => "
             INSERT INTO __TABLE_NAME__ (
-              `name`,
               `key`,
-              `value`
+              `value`,
+              created_at
             ) VALUES :list<
-              :name,
               :key,
-              :value
+              :value,
+              CURRENT_TIMESTAMP
             >
         ",
+        'find_by_id' => "
+            SELECT * FROM __TABLE_NAME__ WHERE id = :id
+        ",
+        'find_by_ids' => "
+            SELECT * FROM __TABLE_NAME__ WHERE id IN (:ids)
+        ",
         'find_by_key' => "
-            SELECT * FROM __TABLE_NAME__ WHERE key = :key
+            SELECT * FROM __TABLE_NAME__ WHERE `key` = :key
+        ",
+        'find_all' => "
+            SELECT * FROM __TABLE_NAME__
         ",
     ];
 }
