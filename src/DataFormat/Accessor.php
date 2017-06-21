@@ -23,7 +23,7 @@ class Accessor
         return self::$instances[$key];
     }
 
-    protected static function createInstance($schema)
+    private static function createInstance($schema)
     {
         $dataFormatDir = Config::get('data_format_dir');
         $dataFormatNamespace = Config::get('data_format_namespace');
@@ -38,7 +38,7 @@ class Accessor
         return new $fullClassName();
     }
 
-    protected static function getFullClassName($dataFormatNamespace, $schema)
+    private static function getFullClassName($dataFormatNamespace, $schema)
     {
         $namespaces = explode("\\", $schema);
         $upperNamespaces = array_map(function ($namespace) {

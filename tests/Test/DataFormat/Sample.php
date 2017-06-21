@@ -1,6 +1,6 @@
 <?php
 
-namespace Caster\Tests\DataFormat;
+namespace Caster\Tests\Test\DataFormat;
 
 class Sample extends \Caster\DataFormat\DataFormat
 {

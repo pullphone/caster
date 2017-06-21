@@ -1,6 +1,6 @@
 <?php
 
-namespace Caster\Tests\DataFormat;
+namespace Caster\Tests\Test\DataFormat;
 
 class SampleShard extends \Caster\DataFormat\DataFormat
 {
@@ -9,7 +9,7 @@ class SampleShard extends \Caster\DataFormat\DataFormat
 
     protected $queries = [
         'create_table' => "CREATE TABLE IF NOT EXISTS __TABLE_NAME__ (
-          `id` BIGINT(20) UNSIGNED AUTO_INCREMENT,
+          `id` BIGINT(20) UNSIGNED,
           `key` VARCHAR(255) NOT NULL,
           `value` BIGINT(20) NOT NULL,
           `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -19,20 +19,24 @@ class SampleShard extends \Caster\DataFormat\DataFormat
         )",
         'drop_table' => "DROP TABLE IF EXISTS __TABLE_NAME__",
         'insert' => "INSERT INTO __TABLE_NAME__ (
+          `id`,
           `name`,
           `key`,
           `value`
         ) VALUES (
+          :id,
           :name,
           :key,
           :value
         )",
         'insert_multi' => "
             INSERT INTO __TABLE_NAME__ (
+              `id`,
               `name`,
               `key`,
               `value`
             ) VALUES :list<
+              :id,
               :name,
               :key,
               :value
@@ -40,6 +44,12 @@ class SampleShard extends \Caster\DataFormat\DataFormat
         ",
         'find_by_key' => "
             SELECT * FROM __TABLE_NAME__ WHERE key = :key
+        ",
+        'find_by_id' => "
+            SELECT * FROM __TABLE_NAME__ WHERE id = :id
+        ",
+        'find_by_ids' => "
+            SELECT * FROM __TABLE_NAME__ WHERE id IN (:ids)
         ",
     ];
 

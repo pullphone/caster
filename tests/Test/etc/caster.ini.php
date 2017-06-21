@@ -1,7 +1,7 @@
 <?php
 return [
     'data_format_dir' => __DIR__ . '/../DataFormat',
-    'data_format_namespace' => 'Caster\\Tests\\DataFormat',
+    'data_format_namespace' => 'Caster\\Tests\\Test\\DataFormat',
     'default' => [
         'master' => [
             'host' => '127.0.0.1:3306',
