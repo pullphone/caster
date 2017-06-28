@@ -35,6 +35,12 @@ class Accessor
         }
 
         $fullClassName = self::getFullClassName($dataFormatNamespace, $schema);
+        if (!class_exists($fullClassName)) {
+            throw new ConfigException(
+                'data_format class is not found',
+                ExceptionInterface::EXCEPTION_CODE_INVALID_CONFIGURATION
+            );
+        }
         return new $fullClassName();
     }
 
