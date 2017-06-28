@@ -15,11 +15,11 @@ class Executor
     }
 
     public function findEx(
+        string $dbType = 'slave',
         string $queryName,
         array $params = [],
         int $limit = null,
-        int $offset = null,
-        string $dbType = 'slave'
+        int $offset = null
     ) {
         $baseQuery = $this->dataFormat->getBaseQuery($queryName);
         $schema = get_class($this->dataFormat);
@@ -61,7 +61,7 @@ class Executor
         int $offset = null,
         bool $useMaster = false
     ) {
-        return $this->findEx($queryName, $params, $limit, $offset, $useMaster ? 'master' : 'slave');
+        return $this->findEx($useMaster ? 'master' : 'slave', $queryName, $params, $limit, $offset);
     }
 
     public function findFirst(
@@ -69,7 +69,7 @@ class Executor
         array $params = null,
         $useMaster = false
     ) {
-        $res = $this->findEx($queryName, $params, 1, 0, $useMaster ? 'master' : 'slave');
+        $res = $this->findEx($useMaster ? 'master' : 'slave', $queryName, $params, 1, 0);
 
         if (is_array($res) && count($res) > 0) {
             return array_shift($res);

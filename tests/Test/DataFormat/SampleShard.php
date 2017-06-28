@@ -6,6 +6,8 @@ class SampleShard extends \Caster\DataFormat\DataFormat
 {
     protected $database = 'test_%d';
     protected $table = 'sample_shard_%02d';
+    protected $databaseShardKeys = ['id' => 2];
+    protected $tableShardKeys = ['id' => 10];
 
     protected $queries = [
         'create_table' => "CREATE TABLE IF NOT EXISTS __TABLE_NAME__ (
@@ -55,14 +57,4 @@ class SampleShard extends \Caster\DataFormat\DataFormat
             SELECT * FROM __TABLE_NAME__
         ",
     ];
-
-    protected function getDatabaseSharding($params)
-    {
-        return $params['id'] % 2;
-    }
-
-    protected function getTableSharding($params)
-    {
-        return [$params['id'] % 10];
-    }
 }

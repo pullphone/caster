@@ -10,6 +10,8 @@ abstract class DataFormat
     protected $database = 'default';
     protected $table = 'table_name';
     protected $queries = [];
+    protected $databaseShardKeys = [];
+    protected $tableShardKeys = [];
 
     public function getBaseQuery($queryName)
     {
@@ -38,7 +40,24 @@ abstract class DataFormat
 
     protected function getTableSharding($params)
     {
-        return null;
+        $sharding = [];
+        foreach ($this->tableShardKeys as $key => $shard) {
+            if (!isset($params[$key])) {
+                throw new DataFormatException(
+                    sprintf('parameter : %s is not found', $key),
+                    ExceptionInterface::EXCEPTION_CODE_INVALID_PARAMETER
+                );
+            }
+            if (!is_int($shard)) {
+                throw new DataFormatException(
+                    sprintf('table sharding key : %s is not interger', $key),
+                    ExceptionInterface::EXCEPTION_CODE_INVALID_CONFIGURATION
+                );
+            }
+            $sharding[] = $params[$key] % $shard;
+        }
+
+        return $sharding;
     }
 
     public function getDatabaseName($params)
@@ -57,6 +76,23 @@ abstract class DataFormat
 
     protected function getDatabaseSharding($params)
     {
-        return null;
+        $sharding = [];
+        foreach ($this->databaseShardKeys as $key => $shard) {
+            if (!isset($params[$key])) {
+                throw new DataFormatException(
+                    sprintf('parameter : %s is not found', $key),
+                    ExceptionInterface::EXCEPTION_CODE_INVALID_PARAMETER
+                );
+            }
+            if (!is_int($shard)) {
+                throw new DataFormatException(
+                    sprintf('database sharding key : %s is not interger', $key),
+                    ExceptionInterface::EXCEPTION_CODE_INVALID_CONFIGURATION
+                );
+            }
+            $sharding[] = $params[$key] % $shard;
+        }
+
+        return $sharding;
     }
 }

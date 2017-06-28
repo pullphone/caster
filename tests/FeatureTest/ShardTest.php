@@ -70,4 +70,13 @@ class ShardTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($res);
         $this->assertCount(3, $res);
     }
+
+    public function testFindEx()
+    {
+        $caster = Caster::get('SampleShard');
+
+        $res = $caster->findEx('standby', 'find_all', ['id' => 2], null, null);
+        $this->assertNotEmpty($res);
+        $this->assertCount(3, $res);
+    }
 }

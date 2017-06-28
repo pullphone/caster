@@ -65,8 +65,8 @@ class NotShardTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $res);
 
         $res = $caster->find('find_by_ids', ['ids' => [1, 2, 3]], null, null, true);
-        $this->assertNotEmpty($res);
-        $this->assertCount(3, $res);
+        $this->assertnotempty($res);
+        $this->assertcount(3, $res);
 
         $res = $caster->find('find_all', [], null, null, true);
         $this->assertNotEmpty($res);
@@ -82,5 +82,14 @@ class NotShardTest extends \PHPUnit_Framework_TestCase
         $res = $caster->find('find_all', []);
         $this->assertNotEmpty($res);
         $this->assertCount(4, $res);
+    }
+
+    public function testFindEx()
+    {
+        $caster = Caster::get('Sample');
+
+        $res = $caster->findEx('standby', 'find_by_ids', ['ids' => [1, 2, 3]], null, null);
+        $this->assertnotempty($res);
+        $this->assertcount(3, $res);
     }
 }

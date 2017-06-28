@@ -1,6 +1,6 @@
 <phpunit backupGlobals="false"
          backupStaticAttributes="false"
-         bootstrap="bootstrap.php"
+         bootstrap="./tests/bootstrap.php"
          cacheTokens="true"
          colors="true"
          convertErrorsToExceptions="true"
@@ -17,7 +17,7 @@
         </whitelist>
     </filter>
     <testsuite name="Caster Test Suite">
-        <directory>./UnitTest</directory>
-        <directory>./FeatureTest</directory>
+        <directory>./tests/UnitTest</directory>
+        <directory>./tests/FeatureTest</directory>
     </testsuite>
 </phpunit>
