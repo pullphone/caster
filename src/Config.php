@@ -8,6 +8,7 @@ use Caster\Exception\ExceptionInterface;
 class Config
 {
     const CONFIG_FILE_NAME = 'caster.ini.php';
+    const DEFAULT_CONNECTION_KEY = 'default';
     private static $data = [];
 
     public static function initialize($dir)
@@ -31,9 +32,19 @@ class Config
         return self::$data[$key];
     }
 
+    public static function isExist($key)
+    {
+        return isset(self::$data[$key]);
+    }
+
     public static function getConnectionConfig($database, $dbType)
     {
         $config = self::get($database);
+        // override default
+        if (empty($config) && self::isExist($database) && self::isExist(self::DEFAULT_CONNECTION_KEY)) {
+            $config = self::get(self::DEFAULT_CONNECTION_KEY);
+        }
+
         if (empty($config)) {
             throw new ConfigException(
                 sprintf('cannot find database configuration : %s', $database)
@@ -46,7 +57,7 @@ class Config
             );
         }
 
-        if (empty($config[$dbType])) {
+        if (!isset($config[$dbType])) {
             throw new ConfigException(
                 sprintf('cannot find database typed configuration : %s[%s]', $database, $dbType)
             );

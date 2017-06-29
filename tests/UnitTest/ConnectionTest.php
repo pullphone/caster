@@ -15,6 +15,14 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($conn, $conn2);
     }
 
+    public function testGetOverrideDefault()
+    {
+        $conn = Connection::get('test_2');
+        $this->assertInstanceOf('Mysqli', $conn);
+        $conn2 = Connection::get('test_2');
+        $this->assertSame($conn, $conn2);
+    }
+
     public function testGetFailed1()
     {
         $msg = null;

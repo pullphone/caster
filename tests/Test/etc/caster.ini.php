@@ -25,12 +25,8 @@ return [
             'password' => 'root',
         ],
         'slave' => [
-            'host' => ['127.0.0.1:3307', '127.0.0.1:3308'],
-            'database' => 'caster_test_1',
         ],
         'standby' => [
-            'host' => '127.0.0.1:3308',
-            'database' => 'caster_test_1',
         ],
     ],
     'test_1' => [
@@ -41,12 +37,10 @@ return [
             'password' => 'root',
         ],
         'slave' => [
-            'host' => ['127.0.0.1:3307', '127.0.0.1:3308'],
-            'database' => 'caster_test_2',
         ],
         'standby' => [
-            'host' => '127.0.0.1:3308',
-            'database' => 'caster_test_2',
         ],
+    ],
+    'test_2' => [
     ],
 ];
