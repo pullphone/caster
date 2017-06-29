@@ -14,6 +14,9 @@ class NotShardTest extends \PHPUnit_Framework_TestCase
 
         $res = $caster->exec('insert', ['key' => 'test_key', 'value' => 'aaaa']);
         $this->assertSame(1, $res);
+        $id = $caster->getLastInsertedId();
+        $this->assertSame(1, $id);
+
         $res = $caster->exec('insert_multi', [
             'list' => [
                 ['key' => 'test_key_2', 'value' => 'bbbb'],
@@ -22,6 +25,12 @@ class NotShardTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
         $this->assertSame(3, $res);
+        $id = $caster->getLastInsertedId();
+        $this->assertSame(2, $id);
+
+        $caster->exec('insert', ['key' => 'test_key_5', 'value' => 'eeee']);
+        $id = $caster->getLastInsertedId();
+        $this->assertSame(5, $id);
 
         // wait 0.5 sec for replication delay
         usleep(500000);
@@ -70,7 +79,7 @@ class NotShardTest extends \PHPUnit_Framework_TestCase
 
         $res = $caster->find('find_all', [], null, null, true);
         $this->assertNotEmpty($res);
-        $this->assertCount(4, $res);
+        $this->assertCount(5, $res);
         foreach ($res as $r) {
             $this->assertArrayHasKey('id', $r);
             $this->assertArrayHasKey('key', $r);
@@ -81,7 +90,7 @@ class NotShardTest extends \PHPUnit_Framework_TestCase
 
         $res = $caster->find('find_all', []);
         $this->assertNotEmpty($res);
-        $this->assertCount(4, $res);
+        $this->assertCount(5, $res);
     }
 
     public function testFindEx()

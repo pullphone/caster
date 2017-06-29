@@ -8,6 +8,8 @@ use Caster\Exception\ExecutorException;
 class Executor
 {
     private $dataFormat;
+    /** @var \Mysqli */
+    private $lastConnection;
 
     public function __construct(DataFormat $dataFormat)
     {
@@ -91,6 +93,7 @@ class Executor
 
         $database = $this->dataFormat->getDatabaseName($params);
         $conn = Connection::get($database, 'master');
+        $this->lastConnection = $conn;
         $queryStr = $query->getEmulateQuery($conn);
         $result = $conn->real_query($queryStr);
 
@@ -103,5 +106,13 @@ class Executor
         }
 
         return (int)$conn->affected_rows;
+    }
+
+    public function getLastInsertedId()
+    {
+        if (!($this->lastConnection instanceof \Mysqli)) {
+            return null;
+        }
+        return $this->lastConnection->insert_id;
     }
 }
