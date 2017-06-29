@@ -25,9 +25,8 @@ class Accessor
 
     private static function createInstance($schema)
     {
-        $dataFormatDir = Config::get('data_format_dir');
         $dataFormatNamespace = Config::get('data_format_namespace');
-        if (empty($dataFormatDir) || !is_dir($dataFormatDir) || empty($dataFormatNamespace)) {
+        if (empty($dataFormatNamespace)) {
             throw new ConfigException(
                 'data_format configuration is invalid',
                 ExceptionInterface::EXCEPTION_CODE_INVALID_CONFIGURATION
