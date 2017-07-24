@@ -108,6 +108,27 @@ class Executor
         return (int)$conn->affected_rows;
     }
 
+    public function begin(array $hint)
+    {
+        $database = $this->dataFormat->getDatabaseName($hint);
+        $conn = Connection::get($database, 'master');
+        return $conn->begin_transaction();
+    }
+
+    public function commit(array $hint)
+    {
+        $database = $this->dataFormat->getDatabaseName($hint);
+        $conn = Connection::get($database, 'master');
+        return $conn->commit();
+    }
+
+    public function rollback(array $hint)
+    {
+        $database = $this->dataFormat->getDatabaseName($hint);
+        $conn = Connection::get($database, 'master');
+        return $conn->rollback();
+    }
+
     public function getLastInsertedId()
     {
         if (!($this->lastConnection instanceof \Mysqli)) {
